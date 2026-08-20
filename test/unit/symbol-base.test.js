@@ -49,8 +49,8 @@ describe('Symb base class', () => {
     expect(() => new Symb().description()).toThrow();
   });
 
-  it('default counter() is null', () => {
-    expect(new Dummy().counter()).toBeNull();
+  it('default scaleLabel() is null', () => {
+    expect(new Dummy().scaleLabel()).toBeNull();
   });
 
   it('renderSpec reflects emoji/counter/pinned for a real symbol', async () => {
@@ -59,6 +59,7 @@ describe('Symb base class', () => {
     expect(spec.emoji).toBe('🐣');
     expect(spec.counter).toBe(3); // Chick: 3 - turns(0)
     expect(spec.pinned).toBe(false);
+    expect(spec.scaleLabel).toBeNull();
 
     await board.lockCell(0, 0, board.cells[0][0], -1);
     expect(board.cells[0][0].renderSpec(game, 0, 0).pinned).toBe(true);

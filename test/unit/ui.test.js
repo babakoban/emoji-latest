@@ -19,6 +19,7 @@ import {
   SpeechBubble,
   BuyButton,
   Luck,
+  Items,
 } from '../../src/symbols/ui.js';
 import { buildGame } from './helpers/fakeGame.js';
 
@@ -34,6 +35,7 @@ const PLACEHOLDER_CLASSES = [
   SpeechBubble,
   BuyButton,
   Luck,
+  Items,
 ];
 
 describe('ui.js', () => {

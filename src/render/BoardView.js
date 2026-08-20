@@ -24,9 +24,12 @@ export class BoardView {
     counterDiv.innerText = '';
     const pinDiv = createDiv('', 'symbol-pin');
     pinDiv.innerText = '';
+    const multiplierDiv = createDiv('', 'symbol-multiplier');
+    multiplierDiv.innerText = '';
     cellDiv.appendChild(symbolDiv);
     cellDiv.appendChild(counterDiv);
     cellDiv.appendChild(pinDiv);
+    cellDiv.appendChild(multiplierDiv);
     cellContainer.appendChild(cellDiv);
     return cellContainer;
   }
@@ -45,8 +48,13 @@ export class BoardView {
       'symbol-counter'
     );
     const pinDiv = createDiv(spec.pinned ? Const.PIN : '', 'symbol-pin');
+    const multiplierDiv = createDiv(
+      spec.scaleLabel || '',
+      'symbol-multiplier'
+    );
     symbolDiv.appendChild(counterDiv);
     symbolDiv.appendChild(pinDiv);
+    symbolDiv.appendChild(multiplierDiv);
     return symbolDiv;
   }
 

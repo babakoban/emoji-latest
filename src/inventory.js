@@ -13,10 +13,10 @@ export class Inventory {
     this.resources[Const.TURNS] = settings.gameLength;
     this.resources[Const.LUCK] = 0;
     this.tempLuckBonus = 0;
-    this.updateUi();
     this.graveyard = [];
     this.giftsOpened = 0;
     this.rowCount = settings.boardY;
+    this.updateUi();
     // Set by Game right after construction (see game.js); stays null until
     // then because Inventory's own constructor already calls updateUi().
     this.stats = null;
@@ -39,6 +39,7 @@ export class Inventory {
       description,
     }));
     this.renderer.renderInventory(entries);
+    this.updateUi();
   }
   remove(symbol, { toGraveyard = true } = {}) {
     const index = this.symbols.indexOf(symbol);
@@ -83,13 +84,36 @@ export class Inventory {
   }
   resetRows() {
     this.rowCount = this.settings.boardY;
+    this.updateUi();
+  }
+  addRows(n = 1) {
+    this.rowCount += n;
+    this.updateUi();
   }
   updateUi() {
-    const entries = Object.entries(this.resources).map(([emoji, value]) => ({
+    const toEntry = (emoji, value) => ({
       emoji,
       value,
       description: this.catalog.symbol(emoji).description(),
-    }));
+    });
+    // Core HUD stays left: 💵, ⏰, items/spaces, 💫. Passives append after.
+    const core = [
+      [Const.MONEY, this.getResource(Const.MONEY)],
+      [Const.TURNS, this.getResource(Const.TURNS)],
+      [
+        Const.ITEMS,
+        `${this.symbols.length}/${this.rowCount * this.settings.boardX}`,
+      ],
+      [Const.LUCK, this.getResource(Const.LUCK)],
+    ];
+    const coreKeys = new Set(core.map(([emoji]) => emoji));
+    const entries = core.map(([emoji, value]) => toEntry(emoji, value));
+    for (const [emoji, value] of Object.entries(this.resources)) {
+      if (coreKeys.has(emoji)) {
+        continue;
+      }
+      entries.push(toEntry(emoji, value));
+    }
     this.renderer.renderResources(entries);
   }
   // Note: This does NOT return a Symbol. It returns an emoji text character for animation purposes.

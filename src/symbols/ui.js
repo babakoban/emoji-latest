@@ -236,3 +236,19 @@ export class Luck extends Symb {
     return [CATEGORY_UNBUYABLE];
   }
 }
+
+export class Items extends Symb {
+  static emoji = '📦';
+  constructor() {
+    super();
+  }
+  copy() {
+    return new Items();
+  }
+  description() {
+    return 'How many items you have versus how many spaces are on the board. Extra items sit out each roll; leftover spaces stay ⬜';
+  }
+  categories() {
+    return [CATEGORY_UNBUYABLE];
+  }
+}

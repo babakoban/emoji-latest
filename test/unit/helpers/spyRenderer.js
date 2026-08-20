@@ -65,7 +65,9 @@ export function makeSpyRenderer() {
     removeRollListener() {},
 
     async renderInventory(_) {},
-    async renderResources(_) {},
+    async renderResources(entries) {
+      push('renderResources', [entries]);
+    },
     async moneyEarnedPassive(value) {
       push('moneyEarnedPassive', [value]);
     },

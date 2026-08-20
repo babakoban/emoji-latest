@@ -172,6 +172,9 @@ export function buildGame({
     resetRows() {
       this.rowCount = boardY;
     },
+    addRows(n = 1) {
+      this.rowCount += n;
+    },
     add(symbol) {
       this.symbols.push(symbol);
     },

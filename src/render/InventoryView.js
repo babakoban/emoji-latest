@@ -32,7 +32,7 @@ export class InventoryView {
         this.showInfo(createInteractiveDescription(description, emoji));
       });
       const countSpan = createSpan(
-        formatBigNumber(value) + '',
+        typeof value === 'number' ? formatBigNumber(value) + '' : String(value),
         'inventoryEntryCount'
       );
       symbolSpan.appendChild(countSpan);

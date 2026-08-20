@@ -99,19 +99,43 @@ describe('things.js', () => {
       expectMoney(game, 0);
     });
 
-    it('pays 💵600 at 31 turns and resets the counter', async () => {
+    it('pays 💵300 at 31 turns, resets the counter, and doubles the next payout', async () => {
       const { game, board } = buildGame({ grid: ['🌝 ⬜'], startingMoney: 0 });
       const moon = board.cells[0][0];
       moon.turns = 31;
       await moon.score(game, 0, 0);
-      expectMoney(game, 600);
+      expectMoney(game, 300);
       expect(moon.turns).toBe(0);
+      expect(moon.payout).toBe(600);
     });
 
-    it('counter() is 31 - turns; turns is copy-preserved', () => {
-      const moon = new Moon(10);
+    it('second payout is 💵600, then 💵1200', async () => {
+      const { game, board } = buildGame({ grid: ['🌝 ⬜'], startingMoney: 0 });
+      const moon = board.cells[0][0];
+      moon.turns = 31;
+      await moon.score(game, 0, 0);
+      moon.turns = 31;
+      await moon.score(game, 0, 0);
+      expectMoney(game, 900);
+      expect(moon.payout).toBe(1200);
+      moon.turns = 31;
+      await moon.score(game, 0, 0);
+      expectMoney(game, 2100);
+      expect(moon.payout).toBe(2400);
+    });
+
+    it('counter() is 31 - turns; copy() preserves turns and payout', () => {
+      const moon = new Moon(10, 600);
       expect(moon.counter()).toBe(21);
-      expect(moon.copy().turns).toBe(10);
+      const copy = moon.copy();
+      expect(copy.turns).toBe(10);
+      expect(copy.payout).toBe(600);
+    });
+
+    it('scaleLabel is hidden at the base payout and shows x2, x4 after doubling', () => {
+      expect(new Moon().scaleLabel()).toBeNull();
+      expect(new Moon(0, 600).scaleLabel()).toBe('x2');
+      expect(new Moon(0, 1200).scaleLabel()).toBe('x4');
     });
   });
 

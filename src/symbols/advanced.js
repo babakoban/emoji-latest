@@ -284,7 +284,7 @@ export class Rows extends Symb {
     return 'Adds a row to the board';
   }
   async evaluateProduce(game, x, y) {
-    game.inventory.rowCount += 1;
+    game.inventory.addRows(1);
     if (x === -1 || y === -1) {
       return;
     }

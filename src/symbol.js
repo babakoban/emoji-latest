@@ -111,6 +111,10 @@ export class Symb {
       emoji: this.displayEmoji(game, x, y),
       counter: this.counter(game),
       pinned: !!game.board.lockedAt(x, y),
+      scaleLabel: this.scaleLabel(game),
     };
+  }
+  scaleLabel(_game) {
+    return null;
   }
 }

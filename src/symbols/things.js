@@ -107,28 +107,35 @@ export class Firefighter extends Symb {
 
 export class Moon extends Symb {
   static emoji = '🌝';
-  constructor(turns = 0) {
+  static basePayout = 300;
+  constructor(turns = 0, payout = Moon.basePayout) {
     super();
     this.rarity = 0.31;
     this.turns = turns;
+    this.payout = payout;
   }
   copy() {
-    return new Moon(this.turns);
+    return new Moon(this.turns, this.payout);
   }
   async score(game, x, y) {
     if (this.turns >= 31) {
       this.turns = 0;
+      const payout = this.payout;
+      this.payout *= 2;
       game.board.redrawCell(game, x, y);
       await game.view.animateCell(x, y, 'flip', 0.3);
-      await this.addMoney(game, 600, x, y);
+      await this.addMoney(game, payout, x, y);
     }
-    this.moonScore = 0;
   }
   counter(_) {
     return 31 - this.turns;
   }
+  scaleLabel(_) {
+    const scale = this.payout / Moon.basePayout;
+    return scale > 1 ? `x${scale}` : null;
+  }
   description() {
-    return 'Every 31 turns: [Pays](pays) 💵600';
+    return `Every 31 turns: [Pays](pays) 💵${this.payout}, then doubles`;
   }
 }
 
