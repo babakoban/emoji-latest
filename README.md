@@ -3,6 +3,9 @@ Slot machine game using emojis, https://unicode.fun/
 
 **Play this fork:** https://babakoban.github.io/emoji-slots/
 
+Source: https://github.com/babakoban/emoji-slots  
+Upstream: https://github.com/balidani/emoji
+
 ## Discord
 https://discord.com/invite/wyCDHsuk
 
@@ -13,17 +16,28 @@ https://discord.com/invite/wyCDHsuk
 
 | Item | Description |
 |------|-------------|
-| Gambler 🤑 | -1% Luck. Triples neighboring 🎲 payouts. Consumes neighboring 💳 for 💵-500 |
+| Gambler 🤑 | -1% Luck. x3 multiplier to neighboring 🎲. Consumes neighboring 💳 for 💵-500 |
 
 ### Changes to Existing Items
 
 | Item | Change |
 |------|--------|
+| Moon 🌝 | Every 31 turns pays 💵300, then doubles (x2, x4, … shown on the tile) |
 | Ticket 🎟️ | Now costs 💵100, +💵100 per ticket bought this run (was a flat cost) |
 | Eye 🧿 | Passived symbols no longer count as removed, so Grave 🪦 won't spawn them back |
 
 ### Other Changes
 - Added a dark mode toggle (⚙️ game settings)
+- Top bar shows 📦 items/spaces as `X/Y` (after turns, before luck)
+
+---
+
+# Branches
+
+- **`master`** — this hosted fork: changelog, GitHub link, GitHub Pages paths
+- **`pr/upstream`** — same gameplay, with fork-only branding/paths stripped for PRs to [balidani/emoji](https://github.com/balidani/emoji)
+
+New game changes go on `pr/upstream`, then cherry-pick onto `master`. Changelog and README stay on `master` only.
 
 ---
 
