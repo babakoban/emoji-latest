@@ -13,7 +13,6 @@ https://discord.com/invite/wyCDHsuk
 
 | Item | Description |
 |------|-------------|
-| Gambler 🤑 | -1% Luck. x3 multiplier to neighboring 🎲. Consumes neighboring 💳 for 💵-500 |
 | Fly 🪰 | Pays 💵-10 for each point of 📦. Cannot be targeted by 📌 or 🧿. Rarity -5% |
 
 ### Changes to Existing Items
@@ -22,11 +21,8 @@ https://discord.com/invite/wyCDHsuk
 |------|--------|
 | Moon 🌝 | Every 31 turns pays 💵300, then doubles (x2, x4, … shown on the tile) |
 | Wildcard 🃏 | Pays the same as the highest-paying neighboring item. Rarity -15% |
-| Ticket 🎟️ | Now costs 💵100, +💵100 per ticket bought this run (was a flat cost) |
-| Eye 🧿 | Passived symbols no longer count as removed, so Grave 🪦 won't spawn them back |
 
 ### Other Changes
-- Added a dark mode toggle (⚙️ game settings)
 - Top bar 📦 shows empty board spaces this spin (negative if over cap)
 
 ---
