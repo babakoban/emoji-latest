@@ -3,9 +3,6 @@ Slot machine game using emojis, https://unicode.fun/
 
 **Play this fork:** https://babakoban.github.io/emoji-slots/
 
-Source: https://github.com/babakoban/emoji-slots  
-Upstream: https://github.com/balidani/emoji
-
 ## Discord
 https://discord.com/invite/wyCDHsuk
 
@@ -17,7 +14,7 @@ https://discord.com/invite/wyCDHsuk
 | Item | Description |
 |------|-------------|
 | Gambler 🤑 | -1% Luck. x3 multiplier to neighboring 🎲. Consumes neighboring 💳 for 💵-500 |
-| Fly 🪰 | Pays 💵-10 for each point of Space (📦). Cannot be targeted by 📌 or 🧿. Rarity -2% |
+| Fly 🪰 | Pays 💵-10 for each point of 📦. Cannot be targeted by 📌 or 🧿. Rarity -5% |
 
 ### Changes to Existing Items
 
