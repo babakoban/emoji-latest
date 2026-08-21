@@ -20,12 +20,12 @@ import { CATEGORY_UNBUYABLE } from '../../src/symbol.js';
 import { buildRealCatalog } from './helpers/realGame.js';
 
 describe('progression roster data', () => {
-  it('is 17 starting + 6 bags (one with 7) = 54 unique symbols', () => {
+  it('is 17 starting + 6 bags (one with 8) = 55 unique symbols', () => {
     expect(STARTING_POOL).toHaveLength(17);
     expect(BAGS).toHaveLength(6);
-    expect(BAGS.map((bag) => bag.length)).toEqual([6, 7, 6, 6, 6, 6]);
-    expect(FULL_ROSTER).toHaveLength(54);
-    expect(new Set(FULL_ROSTER).size).toBe(54);
+    expect(BAGS.map((bag) => bag.length)).toEqual([6, 8, 6, 6, 6, 6]);
+    expect(FULL_ROSTER).toHaveLength(55);
+    expect(new Set(FULL_ROSTER).size).toBe(55);
   });
 
   it('matches the real buyable catalog exactly', async () => {
@@ -116,8 +116,8 @@ describe('Catalog.restrictTo', () => {
   // restrictTo only narrows what generateShop() will *offer* -- it must not
   // remove anything from `symbols`/`categories`. Plenty of symbols spawn
   // other symbols directly via game.catalog.symbol(...) regardless of what
-  // the player has unlocked so far for purchase (Volcano's 🕳️, Wildcard's
-  // disguises, ...); pruning the catalog itself used to make those lookups
+  // the player has unlocked so far for purchase (Volcano's 🕳️, ...);
+  // pruning the catalog itself used to make those lookups
   // throw "Unknown symbol" and crash mid-roll the moment a locked symbol's
   // spawn effect fired. See rocks.test.js's Volcano regression test for the
   // end-to-end case.

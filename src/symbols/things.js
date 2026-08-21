@@ -255,3 +255,31 @@ export class Cloud extends Symb {
     }
   }
 }
+
+export class Cyclone extends Symb {
+  static emoji = '🪰';
+  constructor() {
+    super();
+    this.rarity = -0.05;
+  }
+  copy() {
+    return new Cyclone();
+  }
+  canBePinned() {
+    return false;
+  }
+  canBecomePassive() {
+    return false;
+  }
+  async score(game, x, y) {
+    const payout = game.inventory.occupancy() * -10;
+    if (payout === 0) {
+      return;
+    }
+    await game.view.animateCell(x, y, 'bounce', 0.15);
+    await this.addMoney(game, payout, x, y);
+  }
+  description() {
+    return '[Pays](pays) 💵-10 for each point of 📦. Cannot be targeted by 📌 or 🧿';
+  }
+}

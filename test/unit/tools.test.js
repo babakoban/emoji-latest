@@ -8,6 +8,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { setSeed } from '../../src/core/rng.js';
 import { Pin, Axe, Eye } from '../../src/symbols/tools.js';
 import { Rock } from '../../src/symbols/rocks.js';
+import { Cyclone } from '../../src/symbols/things.js';
 import { buildGame } from './helpers/fakeGame.js';
 import { expectCallCount } from './helpers/assertions.js';
 
@@ -90,6 +91,16 @@ describe('tools.js', () => {
       await new Pin().onBuy(game);
 
       expect(game.recorder.recordToolTarget).toHaveBeenCalledWith(0, 0);
+    });
+
+    it('does not pin 🪰', async () => {
+      const { game, board, spy } = buildGame({
+        grid: ['🪰 ⬜'],
+        inventorySymbols: [new Cyclone()],
+      });
+      spy.pickCellForToolResult = [0, 0];
+      await new Pin().onBuy(game);
+      expect(board.lockedAt(0, 0)).toBe(false);
     });
   });
 
@@ -174,6 +185,18 @@ describe('tools.js', () => {
       });
       await new Eye().onBuy(game);
       expectCallCount(spy, 'pickCellForTool', 0);
+    });
+
+    it('does not convert 🪰 into a passive', async () => {
+      const { game, board, spy, inventory } = buildGame({
+        grid: ['🪰 ⬜'],
+        inventorySymbols: [],
+      });
+      inventory.symbols.push(board.cells[0][0]);
+      spy.pickCellForToolResult = [0, 0];
+      await new Eye().onBuy(game);
+      expect(board.cells[0][0].emoji()).toBe('🪰');
+      expect(board.passiveCells.length).toBe(0);
     });
   });
 });

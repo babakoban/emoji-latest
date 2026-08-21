@@ -1,34 +1,39 @@
-import * as Util from '../util.js';
-import { Symb } from '../symbol.js';
-
-// Frozen disguise pool: every emoji that can legitimately appear on the board
-// (no tools/UI), plus the three special members behaviour #2 calls out. Kept
-// as an explicit constant so the pick is deterministic and independent of
-// future catalog growth.
-export const JOKER_DISGUISES = Util.parseEmojiString(
-  '🪙💼🏦💳💰🫙🎲💸🐣🐔🦊🐉🐛🧈🍒🌽🍍🍿🍹🍾🌳💎🪨🌋👷🔔🥁📀🎈🌝🧵🎁☁️🪄❎🔀🛍️📮🍀🔮🥠🎯🚀🧊🎰🫧🥚🧑‍🎄🃏'
-);
+import { CATEGORY_EMPTY_SPACE, Symb } from '../symbol.js';
 
 export class Wildcard extends Symb {
   static emoji = '🃏';
   constructor() {
     super();
-    this.rarity = 0.04;
+    this.rarity = -0.15;
   }
   copy() {
     return new Wildcard();
   }
-  transformsOnRoll() {
+  scoresLate() {
     return true;
   }
-  // One seeded main-stream draw, at transform time only (never in the
-  // constructor) -- no import-time draw. Draws from the full frozen pool,
-  // not the player's unlocked set, so in Progression mode a disguise can
-  // (harmlessly) preview a symbol not yet unlocked for purchase.
-  rollDisguise(game) {
-    return game.catalog.symbol(Util.randomChoose(JOKER_DISGUISES));
+  async score(game, x, y) {
+    const coords = game.board.nextToExpr(
+      x,
+      y,
+      (sym) => !sym.categories().includes(CATEGORY_EMPTY_SPACE)
+    );
+    if (coords.length === 0) {
+      return;
+    }
+    let best = -Infinity;
+    for (const [nx, ny] of coords) {
+      const paid = game.board.cells[ny][nx].turnMoney || 0;
+      if (paid > best) {
+        best = paid;
+      }
+    }
+    if (!Number.isFinite(best) || best === 0) {
+      return;
+    }
+    await this.addMoney(game, best, x, y);
   }
   description() {
-    return '[Transforms](transform) into a random symbol each turn.';
+    return '[Pays](pays) the same as the highest-paying neighboring item';
   }
 }

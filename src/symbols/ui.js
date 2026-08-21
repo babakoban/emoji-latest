@@ -246,7 +246,7 @@ export class Items extends Symb {
     return new Items();
   }
   description() {
-    return 'How many items you have versus how many spaces are on the board. Extra items sit out each roll; leftover spaces stay ⬜';
+    return 'Number of empty spaces this spin. Negative when over capacity';
   }
   categories() {
     return [CATEGORY_UNBUYABLE];

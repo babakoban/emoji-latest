@@ -59,9 +59,9 @@ export class Catalog {
   // generateShop() consults `shopAllowed` and won't offer anything outside
   // it. Deliberately does NOT touch `symbols`/`categories`: several symbols
   // spawn other symbols regardless of what's currently unlocked for
-  // purchase -- some via `symbol()` directly (Wildcard's disguises,
-  // interactive-emoji taps), others by constructing the class themselves
-  // (Volcano's 🕳️) -- and those lookups, along with category membership
+  // purchase -- some via `symbol()` directly (interactive-emoji taps),
+  // others by constructing the class themselves (Volcano's 🕳️) -- and
+  // those lookups, along with category membership
   // checks like nextToEmpty(), must keep working for every symbol that can
   // appear on the board, locked or not, under either style. No RNG, so it
   // can run after updateSymbols() without touching draw order. Sandbox

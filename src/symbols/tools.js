@@ -4,14 +4,20 @@ import { Symb } from '../symbol.js';
 
 export const CATEGORY_TOOL = Symbol('Tool');
 
-const onToolBuy = async (game, prompt, effect) => {
+const onToolBuy = async (game, prompt, effect, extraPredicate) => {
   if (game.inventory.symbols.length === 0) {
     return;
   }
   game.shop.hide();
   const coord = await game.view.pickCellForTool(
     prompt,
-    (_spec, x, y) => game.board.getSymbol(x, y).emoji() !== Const.EMPTY
+    (spec, x, y) => {
+      const sym = game.board.getSymbol(x, y);
+      if (sym.emoji() === Const.EMPTY) {
+        return false;
+      }
+      return extraPredicate ? extraPredicate(spec, x, y) : true;
+    }
   );
   if (!coord) {
     // Cancelled (or, headlessly, never resolvable) -- restore the shop
@@ -49,7 +55,8 @@ export class Pin extends Symb {
       'click on a symbol to pin in place',
       async (game, x, y) => {
         await game.board.pinCell(game, x, y);
-      }
+      },
+      (_spec, x, y) => game.board.getSymbol(x, y).canBePinned()
     );
   }
 }
@@ -97,7 +104,8 @@ export class Eye extends Symb {
       'click on a symbol to convert',
       async (game, x, y) => {
         await game.board.makePassive(game, x, y);
-      }
+      },
+      (_spec, x, y) => game.board.getSymbol(x, y).canBecomePassive()
     );
   }
 }

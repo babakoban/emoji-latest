@@ -32,12 +32,14 @@ describe('Symb base class', () => {
     expect(new Dummy().emoji()).toBe('🧪');
   });
 
-  it('reset() sets multiplier to 1 but leaves turns untouched', () => {
+  it('reset() sets multiplier to 1 and turnMoney to 0 but leaves turns untouched', () => {
     const d = new Dummy();
     d.multiplier = 5;
     d.turns = 3;
+    d.turnMoney = 9;
     d.reset();
     expect(d.multiplier).toBe(1);
+    expect(d.turnMoney).toBe(0);
     expect(d.turns).toBe(3);
   });
 
@@ -81,6 +83,7 @@ describe('Symb base class', () => {
       const { game, board } = buildGame({ grid: ['🪙 ⬜'], startingMoney: 1 });
       await board.cells[0][0].addResource(game, 0, 0, Const.MONEY, 7);
       expectMoney(game, 8);
+      expect(board.cells[0][0].turnMoney).toBe(7);
     });
 
     it('calls view.moneyEarned only for 💵, not other resources', async () => {

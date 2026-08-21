@@ -175,6 +175,9 @@ export function buildGame({
     addRows(n = 1) {
       this.rowCount += n;
     },
+    occupancy() {
+      return this.rowCount * boardX - this.symbols.length;
+    },
     add(symbol) {
       this.symbols.push(symbol);
     },

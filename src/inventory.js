@@ -90,21 +90,21 @@ export class Inventory {
     this.rowCount += n;
     this.updateUi();
   }
+  occupancy() {
+    return this.rowCount * this.settings.boardX - this.symbols.length;
+  }
   updateUi() {
     const toEntry = (emoji, value) => ({
       emoji,
       value,
       description: this.catalog.symbol(emoji).description(),
     });
-    // Core HUD stays left: 💵, ⏰, items/spaces, 💫. Passives append after.
+    // Core HUD stays left: 💵, ⏰, 💫, empty spaces this spin. Passives append after.
     const core = [
       [Const.MONEY, this.getResource(Const.MONEY)],
       [Const.TURNS, this.getResource(Const.TURNS)],
-      [
-        Const.ITEMS,
-        `${this.symbols.length}/${this.rowCount * this.settings.boardX}`,
-      ],
       [Const.LUCK, this.getResource(Const.LUCK)],
+      [Const.ITEMS, this.occupancy()],
     ];
     const coreKeys = new Set(core.map(([emoji]) => emoji));
     const entries = core.map(([emoji, value]) => toEntry(emoji, value));

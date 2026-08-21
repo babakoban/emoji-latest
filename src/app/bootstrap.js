@@ -100,8 +100,8 @@ export async function bootstrap() {
     // buyable pool to what's unlocked so far. Non-destructive by contract --
     // sets catalog.shopAllowed, which generateShop() consults, rather than
     // pruning the catalog itself -- so locked symbols stay resolvable via
-    // catalog.symbol() for spawns/lookups (e.g. Wildcard disguises,
-    // interactive-emoji taps), and it never touches RNG draw order. Sandbox
+    // catalog.symbol() for spawns/lookups (e.g. interactive-emoji taps),
+    // and it never touches RNG draw order. Sandbox
     // (and mode === null, before the first-run overlay has run) never
     // restricts, matching "today's game unchanged".
     if (PROGRESSION.mode === 'progression') {

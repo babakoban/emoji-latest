@@ -34,6 +34,7 @@ export class Symb {
     this.multiplier = 1;
     this.rarity = 0;
     this.turns = 0;
+    this.turnMoney = 0;
   }
   copy() {
     throw new Error('Trying to get copy of base class.');
@@ -61,6 +62,7 @@ export class Symb {
       game.inventory.addResource(key, value),
     ]);
     if (key === Const.MONEY) {
+      this.turnMoney += value;
       await game.view.moneyEarned(x, y, value);
     }
   }
@@ -88,13 +90,24 @@ export class Symb {
   }
   reset() {
     this.multiplier = 1;
+    this.turnMoney = 0;
   }
   counter(_game) {
     return null;
   }
+  canBePinned() {
+    return true;
+  }
+  canBecomePassive() {
+    return true;
+  }
   // Marker seam: true for symbols that swap into a random disguise right
   // after rolling in (see board.transformWildcards). Base is false.
   transformsOnRoll() {
+    return false;
+  }
+  // Score after other board symbols so neighbor payouts are already known.
+  scoresLate() {
     return false;
   }
   // Plain-data description of this symbol's on-screen appearance.

@@ -294,6 +294,9 @@ export class AutoGame {
       if (cellEmoji === Const.EMPTY) {
         return;
       }
+      if (toolEmoji === '🧿' && !cell.canBecomePassive()) {
+        return;
+      }
       if (this.isLiveTarget(policy, cellEmoji)) {
         found = [x, y];
       }

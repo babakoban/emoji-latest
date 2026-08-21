@@ -20,8 +20,8 @@ describe('item and space HUD', () => {
       spy = makeSpyRenderer();
       inventory = new Inventory(
         {
-          boardX: 5,
-          boardY: 5,
+          boardX: 2,
+          boardY: 2,
           gameLength: 50,
           startingSet: '🍒🍒🪙',
         },
@@ -34,33 +34,37 @@ describe('item and space HUD', () => {
       const calls = spy.calls.filter((c) => c.method === 'renderResources');
       return calls[calls.length - 1].args[0];
     };
-    const hudValue = (emoji) =>
-      lastResources().find((entry) => entry.emoji === emoji).value;
+    const occupancy = () =>
+      lastResources().find((entry) => entry.emoji === Const.ITEMS).value;
 
-    it('shows item/space counts in the resource bar on construct', () => {
-      expect(hudValue(Const.ITEMS)).toBe('3/25');
+    it('shows empty spaces this spin on construct', () => {
+      // 3 items, 4 spaces
+      expect(occupancy()).toBe(1);
     });
 
-    it('updates the item count when a symbol is added or removed', () => {
-      const extra = inventory.catalog.symbol('🍀');
-      inventory.add(extra);
-      expect(hudValue(Const.ITEMS)).toBe('4/25');
-      inventory.remove(extra);
-      expect(hudValue(Const.ITEMS)).toBe('3/25');
+    it('turns 0, then -1, as items fill and exceed the board', () => {
+      inventory.add(inventory.catalog.symbol('🍀'));
+      expect(occupancy()).toBe(0);
+      inventory.add(inventory.catalog.symbol('🍀'));
+      expect(occupancy()).toBe(-1);
     });
 
-    it('updates the space count when a row is added', () => {
+    it('updates when a row is added', () => {
+      inventory.add(inventory.catalog.symbol('🍀'));
+      inventory.add(inventory.catalog.symbol('🍀'));
+      expect(occupancy()).toBe(-1);
       inventory.addRows(1);
-      expect(hudValue(Const.ITEMS)).toBe('3/30');
+      // 5 items, 6 spaces
+      expect(occupancy()).toBe(1);
     });
 
-    it('sits after turns and before luck, with passives last', async () => {
+    it('sits after luck, with passives last', async () => {
       await inventory.addResource('💸', 1);
       expect(lastResources().map((entry) => entry.emoji)).toEqual([
         Const.MONEY,
         Const.TURNS,
-        Const.ITEMS,
         Const.LUCK,
+        Const.ITEMS,
         '💸',
       ]);
     });

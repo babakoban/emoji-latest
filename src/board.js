@@ -285,13 +285,23 @@ export class Board {
       const passiveSymbol = this.passiveCells[i];
       await passiveSymbol.score(game, -1, i);
     }
-    // Score board symbols
+    // Score board symbols. Late scorers (🃏) run after everyone else so they
+    // can copy neighbor payouts from this turn.
+    const late = [];
     this.forAllCells((cell, x, y) => {
-      tasks.push(async () => {
+      const run = async () => {
         await cell.score(game, x, y);
-      });
+      };
+      if (cell.scoresLate()) {
+        late.push(run);
+      } else {
+        tasks.push(run);
+      }
     });
     for (const task of tasks) {
+      await task();
+    }
+    for (const task of late) {
       await task();
     }
   }
@@ -479,6 +489,9 @@ export class Board {
   }
 
   async pinCell(game, x, y) {
+    if (!this.cells[y][x].canBePinned()) {
+      return;
+    }
     await this.lockCell(x, y, this.cells[y][x], -1);
     await this.view.pinCell(x, y, this.cells[y][x].renderSpec(game, x, y));
   }
@@ -488,6 +501,9 @@ export class Board {
   }
 
   async makePassive(game, x, y) {
+    if (!this.cells[y][x].canBecomePassive()) {
+      return;
+    }
     const passiveCopy = this.cells[y][x].copy();
     await this.removeSymbol(game, x, y, { toGraveyard: false });
     this.passiveCells.push(passiveCopy);

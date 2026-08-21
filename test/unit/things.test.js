@@ -3,7 +3,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { setSeed } from '../../src/core/rng.js';
 import { CATEGORY_UNBUYABLE } from '../../src/symbol.js';
 import { CATEGORY_TOOL } from '../../src/symbols/tools.js';
-import { Bomb, Firefighter, Moon, Santa } from '../../src/symbols/things.js';
+import { Bomb, Firefighter, Moon, Santa, Cyclone } from '../../src/symbols/things.js';
 import { buildGame } from './helpers/fakeGame.js';
 import { seedFirstDraw } from './helpers/rngSeeds.js';
 import { expectMoney } from './helpers/assertions.js';
@@ -213,6 +213,37 @@ describe('things.js', () => {
       });
       await board.cells[0][0].score(game, 0, 0);
       expectMoney(game, 0);
+    });
+  });
+
+  describe('Fly 🪰', () => {
+    it('cannot be pinned or made passive', () => {
+      expect(new Cyclone().canBePinned()).toBe(false);
+      expect(new Cyclone().canBecomePassive()).toBe(false);
+    });
+
+    it('pays 💵10 per extra item when under cap (empty spaces cost 💵10)', async () => {
+      const { game, board, inventory } = buildGame({
+        grid: ['🪰 ⬜', '⬜ ⬜'],
+        startingMoney: 0,
+      });
+      inventory.symbols.push(board.cells[0][0]); // 1 item, 4 spaces → 📦 3
+      await board.cells[0][0].score(game, 0, 0);
+      expectMoney(game, -30);
+    });
+
+    it('pays 💵10 per extra item when over cap', async () => {
+      const { game, board, inventory, catalog } = buildGame({
+        grid: ['🪰 ⬜', '⬜ ⬜'],
+        startingMoney: 0,
+      });
+      inventory.symbols.push(board.cells[0][0]);
+      for (let i = 0; i < 5; i++) {
+        inventory.symbols.push(catalog.symbol('🪙'));
+      }
+      // 6 items, 4 spaces → 2 extras → 💵20
+      await board.cells[0][0].score(game, 0, 0);
+      expectMoney(game, 20);
     });
   });
 });
